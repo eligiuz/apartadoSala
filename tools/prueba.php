@@ -32,7 +32,11 @@
 	//date_default_timezone_set('UTC');
 	// Definimos nuestra zona horaria
 date_default_timezone_set("America/Mexico_City");
-	echo date('d/m/Y H:i');
-	echo $hoy = date("Y-m-d H:i:s");
+/*	echo date('d/m/Y H:i');
+	echo $hoy = date("Y-m-d H:i:s");*/
+	
+	$fecha = new DateTime('2016/09/22 15:24');
+	$fecha->add(new DateInterval(PT1H));
+	echo "Fecha: ".$fecha->format('d/m/Y H:i');
 
  ?>

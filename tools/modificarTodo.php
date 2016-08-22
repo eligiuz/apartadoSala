@@ -42,27 +42,28 @@ if (isset($_POST['from']))
             $final_normal  = $_POST['to'];
 
             // Recibimos los demas datos desde el form
-            $titulo = htmlentities(evaluar($_POST['title']));
+			$titulo = filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING);
     		
     		//Recibimos los datos del responsable
-    		$responsable_nombre = htmlentities(evaluar($_POST['responsable_nombre']));
-			$responsable_apellido = htmlentities(evaluar($_POST['responsable_apellido']));
+			$responsable_nombre = filter_input(INPUT_POST,'responsable_nombre',FILTER_SANITIZE_STRING);
+			$responsable_apellido = filter_input(INPUT_POST, 'responsable_apellido', FILTER_SANITIZE_STRING);
+			
 
             // y con la funcion evaluar
-            $body   = htmlentities(evaluar($_POST['event']));
+            $body   = filter_input(INPUT_POST,'event',FILTER_SANITIZE_STRING);
 
             // reemplazamos los caracteres no permitidos
             $clase  = evaluar($_POST['class']);
 			
 			 // Recibimos datos del status
-            $status  = htmlentities(evaluar($_POST['status']));
+            $status  = filter_input(INPUT_POST,'status',FILTER_SANITIZE_STRING);
 			
 			// Recibimos datos del Ponente
-            $ponente_nombre  = htmlentities(evaluar($_POST['ponente_nombre']));
-            $ponente_apellido  = htmlentities(evaluar($_POST['ponente_apellido']));
+            $ponente_nombre  = filter_input(INPUT_POST,'ponente_nombre',FILTER_SANITIZE_STRING);
+            $ponente_apellido  = filter_input(INPUT_POST,'ponente_apellido',FILTER_SANITIZE_STRING);
 			
 			// Recibimos datos del Objetivo
-            $objetivo  = htmlentities(evaluar($_POST['objetivo']));
+            $objetivo  = filter_input(INPUT_POST,'objetivo',FILTER_SANITIZE_STRING);
 			
 			// Recibimos datos de la empresas del ponente
             $empresa  = htmlentities(evaluar($_POST['empresa']));
@@ -78,22 +79,23 @@ if (isset($_POST['from']))
 			$om  = ($_POST['om']);
 			
 			// Recibimos datos de las empresas participantes
-            $inst_part  = htmlentities(evaluar($_POST['inst_part']));
+            $inst_part  = filter_input(INPUT_POST,'inst_part',FILTER_SANITIZE_STRING);
 			
 			// Recibimos datos del Enlace
-            $enlace_nombre  = htmlentities(evaluar($_POST['enlace_nombre']));
-            $enlace_apellido  = htmlentities(evaluar($_POST['enlace_apellido']));
+            $enlace_nombre  = filter_input(INPUT_POST,'enlace_nombre',FILTER_SANITIZE_STRING);
+            $enlace_apellido  = filter_input(INPUT_POST,'enlace_apellido',FILTER_SANITIZE_STRING);
 			
 			// Recibimos datos de las observaciones
-            $observacion  = htmlentities(evaluar($_POST['observacion']));
+            $observacion  = filter_input(INPUT_POST,'observacion',FILTER_SANITIZE_STRING);
 			
 			// Recibimos datos de las opiniones
-            $opinion  = htmlentities(evaluar($_POST['opinion']));
+            $opinion  = filter_input(INPUT_POST,'opinion',FILTER_SANITIZE_STRING);
 
             // y actualizamos su link
         	$query="UPDATE eventos SET title = '$titulo', responsable_nombre ='$responsable_nombre', responsable_apellido ='$responsable_apellido', body = '$body', class = '$clase', start ='$inicio', end = '$final', inicio_normal = '$inicio_normal', final_normal = '$final_normal', status = '$status', ponente_nombre = '$ponente_nombre', ponente_apellido = '$ponente_apellido', objetivo = '$objetivo', empresa = '$empresa', ah = '$ah', am = '$am', dh = '$dh', dm = '$dm', adh = '$adh', adm = '$adm', oh = '$oh', om = '$om', inst_part = '$inst_part', enlace_nombre = '$enlace_nombre', enlace_apellido = '$enlace_apellido', observacion = '$observacion', opinion = '$opinion' WHERE id = $id_evento";
 
 	        // Ejecutamos nuestra sentencia sql
+			$conexion->set_charset('utf8');
 	        $conexion->query($query);
 	        	
 

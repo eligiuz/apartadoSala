@@ -4,7 +4,7 @@
         <!-- <div class="container"> -->
           <span class="navbar-text pull-left">&copy;2016 - <a href="http://utvirtual.uttab.edu.mx">UTVIRTU@L</a>
           </span>
-          <span class="navbar-text pull-right">Secretaria Academica - Innovación Educativa
+          <span class="navbar-text pull-right">Secretaria Académica - Innovación Educativa
           </span>
         <!-- </div> -->
     

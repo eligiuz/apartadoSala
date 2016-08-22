@@ -65,7 +65,7 @@
               
               <li><a href="<?=$base_url?>eventosControl.php">Control de eventos</a></li>
               <li class="divider"></li>
-              <li><a href="<?=$base_url?>/login/cambiar_P.php">Cambiar contraseña</a></li>
+              <li><a href="<?=$base_url?>login/cambiar_P.php">Cambiar contraseña</a></li>
               <li class="divider"></li>
 	          <li><a href="<?=$base_url?>login/logout.php">Cerrar sesión</a></li>
 	          </ul>

@@ -31,80 +31,80 @@ if ($fecha_inicial != $fecha_final){
 		$final_1 = $un_dia.$hora_inicial;//se le agrega la hora a la fecha inicial
 		$final_2 = $un_dia.$hora_final; //se le agrega la hora  a la fecha final
 		
-	//AQUI VA LA VERIFICACION DE FECHAS EN LA AGENDA DE EVENTOS PARA SABER SI ESTAN OCUPADAS LAS FECHAS Y HORAS
-	$fechaCompara = _formatear($final_1);
-	$fechaCompara2 = _formatear($final_2);
-	//Se realiza la comparacion en la base de datos de todos los eventos
-	$sql1 = "SELECT * FROM eventos WHERE ($fechaCompara BETWEEN start AND end) OR ($fechaCompara2 BETWEEN start AND end) OR (start BETWEEN $fechaCompara AND $fechaCompara2) OR (end BETWEEN $fechaCompara AND $fechaCompara2)";
-	
-	$result = $conexion->query($sql1);
-	// Revisamos si existe algún evento que coincida
-	if ($result->num_rows > 0){
-		// Si existe coincidencia se procede con un aviso y esta fecha no podra ser agregada a la base de datos
+		//AQUI VA LA VERIFICACION DE FECHAS EN LA AGENDA DE EVENTOS PARA SABER SI ESTAN OCUPADAS LAS FECHAS Y HORAS
+		$fechaCompara = _formatear($final_1);
+		$fechaCompara2 = _formatear($final_2);
+		//Se realiza la comparacion en la base de datos de todos los eventos
+		$sql1 = "SELECT * FROM eventos WHERE ($fechaCompara BETWEEN start AND end) OR ($fechaCompara2 BETWEEN start AND end) OR (start BETWEEN $fechaCompara AND $fechaCompara2) OR (end BETWEEN $fechaCompara AND $fechaCompara2)";
 		
-		$messages="Las fechas del ".$final_1." al ".$final_2." están ocupadas por otro evento; recuerda que entre eventos debe existir al menos una hora de diferencia";
-		echo '<script type="text/javascript">alert("'.$messages.'");</script>';
-	}else{
-		// Si no existe conincidencia se procede normalmente
-		// Aqui va la información
-	
-		$user_id = $_SESSION['id'];
-
-		// Recibimos el fecha de inicio y la fecha final desde el form
-
-		$inicio = _formatear($final_1);
-		// y la formateamos con la funcion _formatear
-
-		$final  = _formatear($final_2);
-
-		// Recibimos el fecha de inicio y la fecha final desde el form
-
-		$inicio_normal = $final_1;
-
-		// y la formateamos con la funcion _formatear
-		$final_normal  = $final_2;
-
-		// Recibimos los demas datos desde el form
-		$titulo = evaluar($_POST['title']);
+		$result = $conexion->query($sql1);
+		// Revisamos si existe algún evento que coincida
+		if ($result->num_rows > 0){
+			// Si existe coincidencia se procede con un aviso y esta fecha no podra ser agregada a la base de datos
+			
+			$messages="Las fechas del ".$final_1." al ".$final_2." están ocupadas por otro evento; recuerda que entre eventos debe existir al menos una hora de diferencia";
+			echo '<script type="text/javascript">alert("'.$messages.'");</script>';
+		}else{
+			// Si no existe conincidencia se procede normalmente
+			// Aqui va la información
 		
-		//Recibimos los datos del responsable
-		$responsable_nombre = htmlentities(evaluar($_POST['responsable_nombre']));
-		$responsable_apellido = htmlentities(evaluar($_POST['responsable_apellido']));
+			$user_id = $_SESSION['id'];
 
-		// y con la funcion evaluar
-		$body   = htmlentities(evaluar($_POST['event']));
+			// Recibimos el fecha de inicio y la fecha final desde el form
 
-		// reemplazamos los caracteres no permitidos
-		$clase  = htmlentities(evaluar($_POST['class']));
+			$inicio = _formatear($final_1);
+			// y la formateamos con la funcion _formatear
 
-		// insertamos el evento
-		$query="INSERT INTO eventos VALUES(null, '$user_id', '$titulo', '$responsable_nombre' , '$responsable_apellido' , '$body','','$clase','$inicio','$final','$inicio_normal','$final_normal','','','','','',0,0,0,0,0,0,0,0,'','','','','',0,'',0,'')";
+			$final  = _formatear($final_2);
 
-		// Ejecutamos nuestra sentencia sql
-		$conexion->query($query); 
+			// Recibimos el fecha de inicio y la fecha final desde el form
+
+			$inicio_normal = $final_1;
+
+			// y la formateamos con la funcion _formatear
+			$final_normal  = $final_2;
+
+			// Recibimos los demas datos desde el form
+			$titulo = filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING);
+			
+			//Recibimos los datos del responsable
+			$responsable_nombre = filter_input(INPUT_POST,'responsable_nombre',FILTER_SANITIZE_STRING);
+			$responsable_apellido =  filter_input(INPUT_POST,'responsable_apellido',FILTER_SANITIZE_STRING);
+
+			// y con la funcion evaluar
+			$body   = filter_input(INPUT_POST,'event',FILTER_SANITIZE_STRING);
+
+			// reemplazamos los caracteres no permitidos
+			$clase  = evaluar($_POST['class']);
+
+			// insertamos el evento
+			$query="INSERT INTO eventos VALUES(null, '$user_id', '$titulo', '$responsable_nombre' , '$responsable_apellido' , '$body','','$clase','$inicio','$final','$inicio_normal','$final_normal','','','','','',0,0,0,0,0,0,0,0,'','','','','',0,'',0,'')";
+
+			// Ejecutamos nuestra sentencia sql
+			$conexion->query($query); 
+			
+			// Obtenemos el ultimo id insertado
+			$im=$conexion->query("SELECT MAX(id) AS id FROM eventos");
+			$row = $im->fetch_row();  
+			$id = trim($row[0]);
+
+			// para generar el link del evento
+			$link = "$base_url"."descripcion_evento.php?id=$id";
+			
+			//Guardamos el id del primer evento de la serie
+			if($cnt == 0){
+				$id_unico =$id;
+			}
+
+			// y actualizamos su link y el vento seriado
+			$query="UPDATE eventos SET url = '$link', serie = '$id_unico' WHERE id = $id";
+
+			// Ejecutamos nuestra sentencia sql
+			$conexion->query($query);
+			
+			$cnt++; //se aumenta el contador en 1 
 		
-		// Obtenemos el ultimo id insertado
-		$im=$conexion->query("SELECT MAX(id) AS id FROM eventos");
-		$row = $im->fetch_row();  
-		$id = trim($row[0]);
-
-		// para generar el link del evento
-		$link = "$base_url"."descripcion_evento.php?id=$id";
-		
-		//Guardamos el id del primer evento de la serie
-		if($cnt == 0){
-			$id_unico =$id;
-		}
-
-		// y actualizamos su link y el vento seriado
-		$query="UPDATE eventos SET url = '$link', serie = '$id_unico' WHERE id = $id";
-
-		// Ejecutamos nuestra sentencia sql
-		$conexion->query($query);
-		
-		$cnt++; //se aumenta el contador en 1 
-	
-	} // Final de la revision de fechas en la AGENDA
+		} // Final de la revision de fechas en la AGENDA
 		
 	} // final del while
 	
@@ -120,7 +120,6 @@ if ($fecha_inicial != $fecha_final){
 	//revisamos si existe algún evento que coincida
 	if ($result->num_rows > 0){
 		// Si existe coincidencia se procede con un aviso y esta fecha no podra ser agregada a la base de datos
-		echo "<br>Existe un problema";
 		$messages="Las fechas del ".$_POST['from']." al ".$_POST['to']." están ocupadas por otro evento; recuerda que entre eventos debe existir al menos una hora de diferencia";
 		echo '<script type="text/javascript">alert("'.$messages.'");</script>';
 	}else{
@@ -145,17 +144,17 @@ if ($fecha_inicial != $fecha_final){
 		  $final_normal  = $_POST['to'];
 	
 		  // Recibimos los demas datos desde el form
-		  $titulo = evaluar($_POST['title']);
+		  $titulo = filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING);
 		  
 		  //Recibimos los datos del responsable
-		  $responsable_nombre = htmlentities(evaluar($_POST['responsable_nombre']));
-		  $responsable_apellido = htmlentities(evaluar($_POST['responsable_apellido']));
+		  $responsable_nombre = filter_input(INPUT_POST,'responsable_nombre',FILTER_SANITIZE_STRING);
+		  $responsable_apellido = filter_input(INPUT_POST,'responsable_apellido',FILTER_SANITIZE_STRING);
 	
 		  // y con la funcion evaluar
-		  $body   = htmlentities(evaluar($_POST['event']));
+		  $body   = filter_input(INPUT_POST,'event',FILTER_SANITIZE_STRING);
 	
 		  // reemplazamos los caracteres no permitidos
-		  $clase  = htmlentities(evaluar($_POST['class']));
+		  $clase  = evaluar($_POST['class']);
 	
 		  // insertamos el evento
 		  $query="INSERT INTO eventos VALUES(null, '$user_id', '$titulo', '$responsable_nombre' , '$responsable_apellido' , '$body','','$clase','$inicio','$final','$inicio_normal','$final_normal','','','','','',0,0,0,0,0,0,0,0,'','','','','',0,'',0,0)";
