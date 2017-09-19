@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Registrar usuario</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/estilos.css">
+</head>
+<body style="margin-top: #525252">
+	<header>
+		<h1>Registro de usuarios</h1>
+	</header>
+    
+    <div class="container">
+    	<div class="row centered-form" style="margin-top: 60px">
+    	<div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+        	<div class="panel panel-default" style="background: rgba(255,255,255,0.8); box-shadow: rgba(0,0,0,0.3) 20px 20px 20px;">
+        		<div class="panel-heading">
+
+                    <form action="registrar_usuario.php" method="post"> 
+                
+                        <hr />
+                        <h3>Crea una cuenta</h3>
+                
+                        <!--Nombre Usuario-->
+                        <label for="nombre">Nombre de Usuario:</label><br>
+                        <input type="text" name="username" placeholder="usuario" maxlength="20" required>
+                        <br/><br/>
+                
+                        <!--Password-->
+                        <label for="pass">Password:</label><br>
+                        <input type="password" name="password" maxlength="25" required>
+                        <br><br>
+                
+                        <!-- Privilegios -->
+                        <label for="privi">Privilegios</label>
+                        <select class="form-control" name="privi" id="privi">
+                            <option value="2">Administrador</option>
+                            <option value="1">Usuario</option>
+                            <!--<option value="0" selected>Invitado</option>-->
+                        </select>
+                
+                        <br/><br/>
+                        <input type="submit" name="submit" value="Registrarme">
+                        <input type="reset" name="clear" value="Borrar">
+                
+                    </form>
+                
+                    <hr /><br />
+            	</div>
+        	</div>
+            </div>
+    	</div>
+    </div>
+
+	<footer>
+		&copy;2016 <a href="http://utvirtual.uttab.edu.mx">utvirtual.uttab.edu.mx</a>
+	</footer> 
+</body>
+</html>

@@ -42,9 +42,10 @@ if ($fecha_inicial != $fecha_final){
 		if ($result->num_rows > 0){
 			// Si existe coincidencia se procede con un aviso y esta fecha no podra ser agregada a la base de datos
 			
-			$messages="Las fechas del ".$final_1." al ".$final_2." están ocupadas por otro evento; recuerda que entre eventos debe existir al menos una hora de diferencia";
-			echo '<script type="text/javascript">alert("'.$messages.'");</script>';
+			$messages[$cnt]="Las fechas del ".$final_1." al ".$final_2." están ocupadas por otro evento.";
+			
 		}else{
+			
 			// Si no existe conincidencia se procede normalmente
 			// Aqui va la información
 		
@@ -120,8 +121,7 @@ if ($fecha_inicial != $fecha_final){
 	//revisamos si existe algún evento que coincida
 	if ($result->num_rows > 0){
 		// Si existe coincidencia se procede con un aviso y esta fecha no podra ser agregada a la base de datos
-		$messages="Las fechas del ".$_POST['from']." al ".$_POST['to']." están ocupadas por otro evento; recuerda que entre eventos debe existir al menos una hora de diferencia";
-		echo '<script type="text/javascript">alert("'.$messages.'");</script>';
+		$messages[0]="Las fechas del ".$_POST['from']." al ".$_POST['to']." están ocupadas por otro evento.";
 	}else{
 		
 		// Si no existe conincidencia se procede normalmente

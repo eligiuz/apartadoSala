@@ -80,6 +80,13 @@ session_start();
             break;
         
     }
+	
+	$apartado = $row['apartado'];
+	if ($apartado == '1'){
+		$apartado = 'Este evento esta autorizado';
+		} else {
+			$apartado = 'Este evento aún no ha sido autorizado';
+			}
    
 // Eliminar evento
 /*if (isset($_POST['eliminar_evento'])) 
@@ -128,6 +135,8 @@ session_start();
      <b>Fecha termino:</b> <?=$final?><br><br>
      <b>Observación y/o comentario</b>
  	 <p><?=$evento?></p>
+     <br><br>
+     <h4><?=$apartado?></h4>
 <!--<a href="tools/modificar.php?id='<?php /*?><?php echo $id?><?php */?>'"><button type="submit" class="btn btn-danger" name="eliminar_evento">Modificar</button></a>-->
 <!--</body>
 <form action="" method="post">
